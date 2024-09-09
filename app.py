@@ -1,6 +1,6 @@
 # *********************************************************
 # Program: app.py
-# Course: PSP0101 PROBLEM SOLVING AND PROGRAM DESIGN
+# Course: SP1123 MINI IT PROJECT
 # Class: TL11-13
 # Year: 2023/2024 Trimester 3
 # Name: AMIRAH NAILOFAR BINTI MUHAMAD HAFIDZ
@@ -9,13 +9,9 @@
 # Phone: 011-1001-8080
 # *********************************************************
 
-# import streamlit library
+# Import required libraries
 import streamlit as st
-
-# import supabase library
 from supabase import create_client, Client
-
-# import login_user and signup_user functions from auth.py
 from auth import login_user, signup_user
 # from teacher import teacher_dashboard
 # from student import student_dashboard
@@ -27,47 +23,37 @@ supabase_key = st.secrets["supabase"]["key"]
 # Initialize Supabase client
 supabase: Client = create_client(supabase_url, supabase_key)
 
+# Function to log out the user
+def logout():
+    st.session_state['auth'] = None
+    st.sidebar.success("You have been logged out.")
+
 # Main function to handle routing
 def main():
     st.title("MCQ Quiz App")
 
-    # Initialize auth in session state if it does not exist yet
-    if 'auth' not in st.session_state:
-        # set auth to None
-        st.session_state['auth'] = None
-
-
-
-    # Sidebar menu with dropdown list
-    st.sidebar.title("Navigation Option 1")
-
+    # Sidebar menu
     menu = ["Login", "Sign Up", "Teacher Dashboard", "Student Dashboard"]
-    # selectbox to choose the menu
+    
+    # Display logout button if user is logged in
+    if st.session_state.get('auth') is not None:
+        st.sidebar.button("Logout", on_click=logout)
+    
     choice = st.sidebar.selectbox("Menu", menu)
 
-
-
-    # Sidebar menu with links
-    st.sidebar.title("Navigation Option 2")
-    
-    if st.session_state['auth'] is None:
-        if st.sidebar.button("Login", key="login_button"):
+    if 'auth' not in st.session_state or st.session_state['auth'] is None:
+        if choice == "Login":
             login_user(supabase)
-        if st.sidebar.button("Sign Up", key="signup_button"):
+        elif choice == "Sign Up":
             signup_user(supabase)
     else:
-        if st.session_state['auth']['role'] == 'teacher':
-            if st.sidebar.button("Teacher Dashboard", key="teacher_dashboard_button"):
-                teacher_dashboard(supabase)
-        elif st.session_state['auth']['role'] == 'student':
-            if st.sidebar.button("Student Dashboard", key="student_dashboard_button"):
-                student_dashboard(supabase)
-
-        if st.sidebar.button("Logout", key="logout_button"):
-            st.session_state['auth'] = None
-            st.sidebar.success("Successfully logged out.")
-
-
+        role = st.session_state['auth']['role']
+        if choice == "Teacher Dashboard" and role == 'teacher':
+            teacher_dashboard(supabase)
+        elif choice == "Student Dashboard" and role == 'student':
+            student_dashboard(supabase)
+        else:
+            st.warning("You do not have access to this section.")
 
 if __name__ == '__main__':
     main()
