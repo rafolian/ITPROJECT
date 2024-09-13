@@ -13,8 +13,8 @@
 import streamlit as st
 from supabase import create_client, Client
 from auth import login_user, signup_user
-# from teacher import teacher_dashboard
-# from student import student_dashboard
+from teacher import teacher_dashboard
+from student import student_dashboard
 
 # Load Supabase credentials from secrets.toml
 supabase_url = st.secrets["supabase"]["url"]
@@ -28,7 +28,7 @@ def logout():
     st.session_state['auth'] = None
     st.sidebar.success("You have been logged out.")
 
-# Main function to handle routing
+# Main function to handle routing and display the app
 def main():
     st.title("MCQ Quiz App")
 
@@ -38,15 +38,19 @@ def main():
     # Display logout button if user is logged in
     if st.session_state.get('auth') is not None:
         st.sidebar.button("Logout", on_click=logout)
-    
+
+    # Display login and sign up options if user is not logged in
     choice = st.sidebar.selectbox("Menu", menu)
 
+    # Display the appropriate page based on the user's choice and role
     if 'auth' not in st.session_state or st.session_state['auth'] is None:
         if choice == "Login":
             login_user(supabase)
         elif choice == "Sign Up":
             signup_user(supabase)
     else:
+
+        # Get the user's role from the session state
         role = st.session_state['auth']['role']
         if choice == "Teacher Dashboard" and role == 'teacher':
             teacher_dashboard(supabase)
@@ -54,6 +58,7 @@ def main():
             student_dashboard(supabase)
         else:
             st.warning("You do not have access to this section.")
-
+            
+# Run the main function when the script is executed
 if __name__ == '__main__':
     main()

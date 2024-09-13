@@ -17,9 +17,11 @@ from supabase import Client
 def login_user(supabase: Client):
     st.subheader("Login")
 
+    # Get email and password from user
     email = st.text_input("Email")
     password = st.text_input("Password", type="password")
-
+    
+    # Check if the user exists in the database and the password is correct
     if st.button("Login"):
         user = supabase.from_('users').select('*').eq('email', email).single().execute()
         if user.data:
@@ -35,10 +37,12 @@ def login_user(supabase: Client):
 def signup_user(supabase: Client):
     st.subheader("Create New Account")
 
+    # Get email, password, and role from user
     email = st.text_input("Email")
     password = st.text_input("Password", type="password")
     role = st.selectbox("Role", ["teacher", "student"])
 
+    # Insert the new user into the database
     if st.button("Sign Up"):
         user = supabase.from_('users').insert({
             'email': email,
@@ -46,6 +50,7 @@ def signup_user(supabase: Client):
             'role': role
         }).execute()
 
+        # Check if the user was successfully created and store the user in the session state
         if user.data:
             st.success("Account created for {}".format(email))
             st.session_state['auth'] = user.data
