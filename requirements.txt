@@ -1,0 +1,4 @@
+# requirements.txt
+st-supabase-connection==2.6.0
+streamlit==1.38.0
+supabase
