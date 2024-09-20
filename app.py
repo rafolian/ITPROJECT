@@ -15,6 +15,7 @@ from supabase import create_client, Client
 from auth import login_user, signup_user
 from teacher import teacher_dashboard
 from student import student_dashboard
+from result import result_management_dashboard
 
 # Load Supabase credentials from secrets.toml
 supabase_url = st.secrets["supabase"]["url"]
@@ -33,7 +34,7 @@ def main():
     st.title("MCQ Quiz App")
 
     # Sidebar menu
-    menu = ["Login", "Sign Up", "Teacher Dashboard", "Student Dashboard"]
+    menu = ["Login", "Sign Up", "Teacher Dashboard", "Student Dashboard", "Result"]
     
     # Display logout button if user is logged in
     if st.session_state.get('auth') is not None:
