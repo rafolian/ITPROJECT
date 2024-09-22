@@ -3,7 +3,7 @@
 # Course: SP1123 MINI IT PROJECT
 # Class: TL11-13
 # Year: 2023/2024 Trimester 3
-# Name: XX
+# Name: NUR
 # ID: XX
 # Email: XX
 # Phone: XX
