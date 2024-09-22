@@ -15,6 +15,10 @@ from supabase import create_client, Client
 
 # Import login_user and signup_user functions from auth.py
 from auth import login_user, signup_user
+<<<<<<< HEAD
+from teacher import teacher_dashboard
+from student import student_dashboard
+=======
 
 # Import teacher_dashboard function from teacher.py
 from teacher import teacher_dashboard
@@ -23,6 +27,7 @@ from teacher import teacher_dashboard
 from student import student_dashboard
 
 # Import result_management_dashboard function from result.py
+>>>>>>> b6a26196a944a4eccff569058760f4dcd8cb69ae
 from result import result_management_dashboard
 
 # Load Supabase credentials from secrets.toml
@@ -117,10 +122,14 @@ def main():
     st.title("")
     
     # Sidebar menu
+<<<<<<< HEAD
+    menu = ["Login", "Sign Up", "Teacher Dashboard", "Student Dashboard", "Result"]
+=======
     menu = ["Login", "Sign Up", "Teacher Dashboard", "Student Dashboard", "Result", "FAQ"]
+>>>>>>> b6a26196a944a4eccff569058760f4dcd8cb69ae
     
     # Display logout button if user is logged in
-    if st.session_state.get('auth') is not None:
+if st.session_state.get('auth') is not None:
         st.sidebar.button("Logout", on_click=logout)
 
     # Display login and sign up options if user is not logged in
@@ -144,8 +153,13 @@ def main():
             teacher_dashboard(supabase)
         elif choice == "Student Dashboard" and role == 'student':
             student_dashboard(supabase)
+<<<<<<< HEAD
+        elif choice == "Result" and role == 'student and teacher':
+            result_management_dashboard(supabase)
+=======
         elif choice == "FAQ":
             faq()
+>>>>>>> b6a26196a944a4eccff569058760f4dcd8cb69ae
         else:
             st.warning("You do not have access to this section.")
 
