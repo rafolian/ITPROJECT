@@ -129,7 +129,7 @@ def main():
 >>>>>>> b6a26196a944a4eccff569058760f4dcd8cb69ae
     
     # Display logout button if user is logged in
-    if st.session_state.get('auth') is not None:
+if st.session_state.get('auth') is not None:
         st.sidebar.button("Logout", on_click=logout)
 
     # Display login and sign up options if user is not logged in
