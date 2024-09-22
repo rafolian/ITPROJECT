@@ -1,13 +1,13 @@
 
 # *********************************************************
-# Program: student.py
+# Program: result.py
 # Course: SP1123 MINI IT PROJECT
 # Class: TL11-13
 # Year: 2023/2024 Trimester 3
-# Name: XX
-# ID: XX
-# Email: XX
-# Phone: XX
+# Name: NUR FARAH AMYLIA BINTI JAMIL
+# ID: 1231101910
+# Email: 1231101910@student.mmu.edu.my
+# Phone: 0184656557
 # *********************************************************
 
 import streamlit as st
