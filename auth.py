@@ -13,7 +13,7 @@
 import streamlit as st
 from supabase import Client
 
-# Function to log out the user
+# Function for user login
 def login_user(supabase: Client):
     st.subheader("Login")
 
@@ -24,12 +24,20 @@ def login_user(supabase: Client):
     # Check if the user exists in the database and the password is correct
     if st.button("Login"):
         user = supabase.from_('users').select('*').eq('email', email).single().execute()
+
+        # If the user exist
         if user.data:
+
+            # If the password is correct
             if user.data['password_hash'] == password:
                 st.session_state['auth'] = user.data
                 st.success("Logged In as {}".format(email))
+
+            # If the password is incorrect
             else:
                 st.error("Incorrect Password")
+                
+        # If the user does not exist
         else:
             st.error("User not found")
 
