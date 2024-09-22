@@ -19,3 +19,5 @@ Development Journal:
 3. At week 5, we have created student.py and teacher.py as an intial code. Further development is being planned.
 
 4. At week 6, we continue to integrate the codes and reviewing the features.
+
+5. At week 7, we are making the github repo public and publishing the app to the streamlit community cloud at https://itproject-mmu.streamlit.com.
