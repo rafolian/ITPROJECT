@@ -22,9 +22,6 @@ from teacher import teacher_dashboard
 # Import student function from student.py
 from student import student_dashboard
 
-# Import result_management_dashboard function from result.py
-from result import result_management_dashboard
-
 # Load Supabase credentials from secrets.toml
 supabase_url = st.secrets["supabase"]["url"]
 supabase_key = st.secrets["supabase"]["key"]
@@ -117,7 +114,7 @@ def main():
     st.title("")
     
     # Sidebar menu
-    menu = ["Login", "Sign Up", "Teacher Dashboard", "Student Dashboard", "Result", "FAQ"]
+    menu = ["Login", "Sign Up", "Teacher Dashboard", "Student Dashboard", "FAQ"]
     
     # Display logout button if user is logged in
     if st.session_state.get('auth') is not None:
@@ -144,8 +141,6 @@ def main():
             teacher_dashboard(supabase)
         elif choice == "Student Dashboard" and role == 'student':
             student_dashboard(supabase)
-        elif choice == "Result" and (role == 'student' or role == 'teacher'):
-            result_management_dashboard(supabase)
         elif choice == "FAQ":
             faq()
         else:
