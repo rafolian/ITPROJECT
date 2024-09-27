@@ -37,7 +37,7 @@ def teacher_dashboard(supabase: Client):
         else:
             st.error("Please enter a subject name.")
 
-    # Step 2: Add 5 MCQ Questions (if subject is created)
+    # Step 2: Add 5 MCQ questions (if subject is created)
     if st.session_state['subject_created']:
         st.subheader(f"Add 5 Questions to {subject_name}")
         
@@ -88,3 +88,33 @@ def teacher_dashboard(supabase: Client):
                 st.session_state['subject_created'] = False  # Reset for the next session
             else:
                 st.error("Subject ID not found in the database.")
+
+    # Step 3: View Student Results for a Subject
+    st.subheader("View Student Results")
+    
+    # Fetch all subjects created by the teacher
+    subjects = supabase.from_('subjects').select('id, name').eq('teacher_id', st.session_state['auth']['id']).execute()
+    
+    if subjects.data:
+        subject_names = {subject['name']: subject['id'] for subject in subjects.data}
+        selected_subject_name = st.selectbox("Select Subject to View Results", list(subject_names.keys()))
+        selected_subject_id = subject_names[selected_subject_name]
+        
+        # Fetch the results of students for the selected subject
+        results = supabase.from_('results').select('student_id, score, created_at').eq('subject_id', selected_subject_id).execute()
+
+        if results.data:
+            for result in results.data:
+                # Fetch student email or name from the users table
+                student_info = supabase.from_('users').select('email').eq('id', result['student_id']).single().execute()
+
+                # Display student result information
+                if student_info.data:
+                    st.write(f"*Student*: {student_info.data['email']}")
+                    st.write(f"*Score*: {result['score']}")
+                    st.write(f"*Date Taken*: {result['created_at'].split('T')[0]}")
+                    st.write("---")
+        else:
+            st.write("No students have taken this quiz yet.")
+    else:
+        st.write("No subjects available to view results.")
