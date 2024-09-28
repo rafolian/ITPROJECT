@@ -41,7 +41,7 @@ def faq():
     **Q1: What is this Application?**
              
     A1: This is a simple MCQ Quiz Application that allows teachers to create quizzes and students to take them online.
-             
+
     **Q2: How can this be used in education?**
              
     A2: Teachers can create quizzes for students to study and test their knowledge. Students can take the quizzes to practice and improve their understanding.
@@ -68,7 +68,7 @@ def add_header():
         top: 40px;
         left: 0;
         width: 100%;
-        background-color: #f1f1f1;
+        background-color: #98DED9;
         color: white;
         text-align: center;
         padding: 10px;
