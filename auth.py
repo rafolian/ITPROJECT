@@ -1,5 +1,5 @@
 # *********************************************************
-# Program: app.py
+# Program: auth.py
 # Course: SP1123 MINI IT PROJECT
 # Class: TL11-13
 # Year: 2023/2024 Trimester 3
@@ -12,6 +12,51 @@
 # Import required libraries
 import streamlit as st
 from supabase import Client
+
+import streamlit as st
+
+# UI function to display the change password form
+def change_password_ui(supabase: Client):
+    st.subheader("Change Your Password")
+
+    # Ask the user to input their current password and new password
+    current_password = st.text_input("Current Password", type="password")
+    new_password = st.text_input("New Password", type="password")
+    confirm_new_password = st.text_input("Confirm New Password", type="password")
+
+    # Change password button
+    if st.button("Change Password"):
+        if new_password == confirm_new_password:
+            result = change_password(supabase, st.session_state['auth']['id'], current_password, new_password)
+            if result == "success":
+                st.success("Your password has been changed successfully.")
+            elif result == "incorrect_password":
+                st.error("Current password is incorrect.")
+            else:
+                st.error("An error occurred. Please try again.")
+        else:
+            st.error("New passwords do not match.")
+
+
+# Logic function to validate the current password and update with the new password
+def change_password(supabase: Client, user_id, current_password, new_password):
+    try:
+        # Fetch the current password from the database
+        user = supabase.from_('users').select('password_hash').eq('id', user_id).single().execute()
+
+        if user.data:
+            # Verify the current password matches the stored one
+            if current_password == user.data['password_hash']:  # Direct comparison, no hashing as requested
+                # Update the password in the database
+                supabase.from_('users').update({'password_hash': new_password}).eq('id', user_id).execute()
+                return "success"
+            else:
+                return "incorrect_password"
+        else:
+            return "user_not_found"
+    except Exception as e:
+        print(f"Error changing password: {e}")
+        return "error"
 
 # Function for user login
 def login_user(supabase: Client):

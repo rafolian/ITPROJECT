@@ -14,7 +14,7 @@ import streamlit as st
 from supabase import create_client, Client
 
 # Import login_user and signup_user functions from auth.py
-from auth import login_user, signup_user
+from auth import login_user, signup_user, change_password_ui
 
 # Import teacher_dashboard function from teacher.py
 from teacher import teacher_dashboard
@@ -115,37 +115,31 @@ def main():
     
     # Sidebar menu
     menu = ["Login", "Sign Up", "Teacher Dashboard", "Student Dashboard", "FAQ"]
-    
-    # Display logout button if user is logged in
+
+    # Display logout and change password button if user is logged in
     if st.session_state.get('auth') is not None:
+        menu.append("Change Password")  # Add "Change Password" option for logged-in users
         st.sidebar.button("Logout", on_click=logout)
 
-    # Display login and sign up options if user is not logged in
-    choice = st.sidebar.selectbox("MAIN MENU", menu)
+    choice = st.sidebar.selectbox("Menu", menu)
 
-    # Enable these choice when user is not logged in
+    # Check authentication state
     if 'auth' not in st.session_state or st.session_state['auth'] is None:
         if choice == "Login":
             login_user(supabase)
         elif choice == "Sign Up":
-            signup_user(supabase)   
-        elif choice == "FAQ":
-            faq()
-
-    # Enable these choice when user is logged in
+            signup_user(supabase)
     else:
-
-        # Get the user's role from the session state
-        role = st.session_state['auth']['role']
-        if choice == "Teacher Dashboard" and role == 'teacher':
+        # Route user to correct dashboard based on role
+        if choice == "Teacher Dashboard" and st.session_state['auth']['role'] == 'teacher':
             teacher_dashboard(supabase)
-        elif choice == "Student Dashboard" and role == 'student':
+        elif choice == "Student Dashboard" and st.session_state['auth']['role'] == 'student':
             student_dashboard(supabase)
+        elif choice == "Change Password":
+            change_password_ui(supabase)  # Call the change password UI when selected
         elif choice == "FAQ":
             faq()
-        else:
-            st.warning("You do not have access to this section.")
-
+            
     # Add footer
     add_footer()
 
