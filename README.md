@@ -1,5 +1,9 @@
 #TC1L
 
+Github Repo Address:
+https://github.com/rafolian/ITPROJECT.git
+
+
 Architecture:
 1. This project is based on python, utilizing streamlit as the main framework. It is also using supabase as the database.
 
