@@ -60,3 +60,10 @@ Development Journal:
 4. At week 6, we continue to integrate the codes and reviewing the features.
 
 5. At week 7, we are making the github repo public and publishing the app to the streamlit community cloud at https://itproject-mmu.streamlit.app.
+
+
+Instruction to Run:
+
+1. activate python environment with the libraries defined in requirements.txt
+
+2. run the code "streamlit run app.py"
