@@ -78,7 +78,6 @@ def student_dashboard(supabase: Client):
         else:
             st.write(f"No questions found for {selected_subject_name}.")
     else:
-<<<<<<< HEAD
         st.write("No subjects available.")
 
     # New Section: Show Subjects Student Has Taken
@@ -97,6 +96,3 @@ def student_dashboard(supabase: Client):
                 st.write("---")
     else:
         st.write("You have not taken any subjects yet.")
-=======
-        st.warning("No subjects available.")
->>>>>>> 804267251f550bf3fd4cb06af2bd4da0f054ea42
