@@ -69,9 +69,9 @@ def student_dashboard(supabase: Client):
                 if wrong_questions:
                     st.error("You answered the following questions incorrectly:")
                     for wrong in wrong_questions:
-                        st.write(f"*Question*: {wrong['question_text']}")
-                        st.write(f"*Your Answer*: {wrong['student_answer']}")
-                        st.write(f"*Correct Answer*: {wrong['correct_answer']}")
+                        st.write(f"Question: {wrong['question_text']}")
+                        st.write(f"Your Answer: {wrong['student_answer']}")
+                        st.write(f"Correct Answer: {wrong['correct_answer']}")
                         st.write("---")
                 else:
                     st.success("Great job! You answered all questions correctly!")
@@ -80,11 +80,11 @@ def student_dashboard(supabase: Client):
     else:
         st.write("No subjects available.")
 
-    # New Section: Show Subjects Student Has Taken
+    # New Section: Show Subjects Student Has Taken with Date
     st.subheader("Subjects You Have Taken")
 
-    # Fetch all the subjects the student has already taken from the 'results' table
-    taken_subjects = supabase.from_('results').select('subject_id, score').eq('student_id', st.session_state['auth']['id']).execute()
+    # Fetch all the subjects the student has already taken from the 'results' table, including the date
+    taken_subjects = supabase.from_('results').select('subject_id, score, created_at').eq('student_id', st.session_state['auth']['id']).execute()
 
     if taken_subjects.data:
         for entry in taken_subjects.data:
@@ -99,8 +99,8 @@ def student_dashboard(supabase: Client):
                     date_taken = date_taken.split("T")[0]  # Extract only the date (YYYY-MM-DD)
                 
                 # Display the subject name, score, and date taken
-                st.write(f"*Subject*: {subject_info.data['name']}")
-                st.write(f"*Score*: {entry['score']}")
+                st.write(f"Subject: {subject_info.data['name']}")
+                st.write(f"Score: {entry['score']}")
                 st.write(f"Date Taken: {date_taken}")
                 st.write("---")
     else:
