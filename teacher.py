@@ -3,10 +3,10 @@
 # Course: SP1123 MINI IT PROJECT
 # Class: TL11-13
 # Year: 2023/2024 Trimester 3
-# Name: XX NAMA??
-# ID: XX
-# Email: XX
-# Phone: XX
+# Name: NURUL HAIFA ALIAH BINTI MOHD YAZID
+# ID: 1231102000
+# Email: 1231102000@STUDENT.MMU.EDU.MY
+# Phone: 0127211586
 # *********************************************************
 
 import streamlit as st
