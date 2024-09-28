@@ -58,33 +58,37 @@ def change_password(supabase: Client, user_id, current_password, new_password):
         print(f"Error changing password: {e}")
         return "error"
 
-# Function for user login
+# Function to log in the user
 def login_user(supabase: Client):
     st.subheader("Login")
 
-    # Get email and password from user
+    # Input fields for email and password
     email = st.text_input("Email")
     password = st.text_input("Password", type="password")
-    
-    # Check if the user exists in the database and the password is correct
+
+    # Login button
     if st.button("Login"):
-        user = supabase.from_('users').select('*').eq('email', email).single().execute()
-
-        # If the user exist
-        if user.data:
-
-            # If the password is correct
-            if user.data['password_hash'] == password:
-                st.session_state['auth'] = user.data
-                st.success("Logged In as {}".format(email))
-
-            # If the password is incorrect
-            else:
-                st.error("Incorrect Password")
-                
-        # If the user does not exist
+        # Check for empty fields
+        if not email or not password:
+            st.error("Both email and password are required.")
         else:
-            st.error("User not found")
+            try:
+                # Fetch user information from the database
+                user = supabase.from_('users').select('*').eq('email', email).single().execute()
+
+                # Check if the user exists in the database
+                if user.data:
+                    # Check if the password matches
+                    if user.data['password_hash'] == password:  # Direct comparison as per the current setup
+                        st.session_state['auth'] = {'id': user.data['id'], 'role': user.data['role'], 'email': user.data['email']}
+                        st.success(f"Welcome, {user.data['email']}!")
+                    else:
+                        st.error("Incorrect password.")
+                else:
+                    st.error("User not found. Please check your email or sign up.")
+
+            except Exception as e:
+                st.error(f"An error occurred during login: {e}")
 
 # Function to sign up a new user
 def signup_user(supabase: Client):

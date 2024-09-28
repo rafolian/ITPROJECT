@@ -113,32 +113,47 @@ def main():
 
     st.title("")
     
-    # Sidebar menu
-    menu = ["Login", "Sign Up", "Teacher Dashboard", "Student Dashboard", "FAQ"]
+    # Initialize session state for authentication
+    if 'auth' not in st.session_state:
+        st.session_state['auth'] = None
 
-    # Display logout and change password button if user is logged in
-    if st.session_state.get('auth') is not None:
-        menu.append("Change Password")  # Add "Change Password" option for logged-in users
-        st.sidebar.button("Logout", on_click=logout)
-
+    # Sidebar menu with all options
+    menu = ["Login", "Sign Up", "FAQ", "Teacher Dashboard", "Student Dashboard", "Change Password"]
     choice = st.sidebar.selectbox("Menu", menu)
 
-    # Check authentication state
-    if 'auth' not in st.session_state or st.session_state['auth'] is None:
-        if choice == "Login":
+    # Display logout button and user info if user is logged in
+    if st.session_state['auth'] is not None:
+        st.sidebar.write(f"Logged in as: {st.session_state['auth']['email']}")
+        st.sidebar.button("Logout", on_click=logout)
+
+    # Routing based on user selection
+    if choice == "Login":
+        if st.session_state['auth'] is None:
             login_user(supabase)
-        elif choice == "Sign Up":
+        else:
+            st.success(f"You are already logged in as {st.session_state['auth']['email']}.")
+    elif choice == "Sign Up":
+        if st.session_state['auth'] is None:
             signup_user(supabase)
-    else:
-        # Route user to correct dashboard based on role
-        if choice == "Teacher Dashboard" and st.session_state['auth']['role'] == 'teacher':
+        else:
+            st.success(f"You are already logged in as {st.session_state['auth']['email']}.")
+    elif choice == "FAQ":
+        faq()
+    elif choice == "Teacher Dashboard":
+        if st.session_state['auth'] is not None and st.session_state['auth']['role'] == 'teacher':
             teacher_dashboard(supabase)
-        elif choice == "Student Dashboard" and st.session_state['auth']['role'] == 'student':
+        else:
+            st.warning("You must be logged in as a teacher to access this section.")
+    elif choice == "Student Dashboard":
+        if st.session_state['auth'] is not None and st.session_state['auth']['role'] == 'student':
             student_dashboard(supabase)
-        elif choice == "Change Password":
-            change_password_ui(supabase)  # Call the change password UI when selected
-        elif choice == "FAQ":
-            faq()
+        else:
+            st.warning("You must be logged in as a student to access this section.")
+    elif choice == "Change Password":
+        if st.session_state['auth'] is not None:
+            change_password_ui(supabase)
+        else:
+            st.warning("You must be logged in to change your password.")
             
     # Add footer
     add_footer()
