@@ -91,8 +91,17 @@ def student_dashboard(supabase: Client):
             # Get subject name for each entry
             subject_info = supabase.from_('subjects').select('name').eq('id', entry['subject_id']).single().execute()
             if subject_info.data:
+                # Handle missing 'created_at' field
+                date_taken = entry.get('created_at', 'N/A')  # Default to 'N/A' if 'created_at' is not present
+                
+                # If 'created_at' is present, format it
+                if date_taken != 'N/A':
+                    date_taken = date_taken.split("T")[0]  # Extract only the date (YYYY-MM-DD)
+                
+                # Display the subject name, score, and date taken
                 st.write(f"*Subject*: {subject_info.data['name']}")
-                st.write(f"*Score*: {entry['score']}/{len(questions.data)}")
+                st.write(f"*Score*: {entry['score']}")
+                st.write(f"Date Taken: {date_taken}")
                 st.write("---")
     else:
         st.write("You have not taken any subjects yet.")
